@@ -1,14 +1,14 @@
 import java.util.Scanner;
 
 public class Toss {
-    private String india;
-    private String pakistan;
-    public Toss(String india,String pakistan){
+    private Team india;
+    private Team pakistan;
+    public Toss(Team india,Team pakistan){
         this.india=india;
         this.pakistan=pakistan;
     }
 
-    public String toss(){
+    public Team toss(){
         Scanner scanner=new Scanner(System.in);
         int choose= scanner.nextInt();
         int toss_result=(int) (Math.random()*2);
