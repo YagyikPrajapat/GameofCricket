@@ -4,14 +4,37 @@ import java.util.Scanner;
 public class MatchController {
     private int overs;
     ArrayList<Integer> overs_run;
-    Team india=new Team("india");
-    Team pakistan=new Team("pakistan");
-//    ArrayList<Player> india_team=india.getDetails();
-//    ArrayList<Player> pakistan_team=pakistan.getDetails();
-//    ArrayList<Player> batting_team;
-//    ArrayList<Player> bowling_team;
+    Team india;
+    Team pakistan;
     public MatchController(){
         this.overs_run=new ArrayList<>();
+        this.india=new Team("india");
+        this.pakistan=new Team("pakistan");
+    }
+
+    public void matchStarts(){
+        overs();
+        Team toss_result=Toss();
+        if(toss_result.getTeam_name().equals("pakistan")) {
+            Match(india);
+            System.out.println("first innings ends\n");
+            Match(pakistan);
+            System.out.println("second innings ends\n");
+        }
+        else{
+            Match(pakistan);
+            System.out.println("first innings ends\n");
+            Match(india);
+            System.out.println("second innings ends\n");
+        }
+        Scoreboard india_scoreboard= new Scoreboard(india);
+        Scoreboard pakistan_scoreboard= new Scoreboard(pakistan);
+
+
+        india_scoreboard.get_scores();
+        pakistan_scoreboard.get_scores();
+
+        results();
     }
 
     public void overs(){
@@ -24,13 +47,22 @@ public class MatchController {
         return overs;
     }
 
+    public Team Toss(){
+        System.out.println("Choose 1 or 0 for toss as a skipper of Indian Team:");
+        Toss toss=new Toss(india,pakistan);
+        Team toss_result=toss.toss();
+        System.out.println(toss_result.getTeam_name());
+        return toss_result;
+    }
+
     public void Match(Team team){
         int total_runs=0,total_wickets=0;
         int strike=0,non_strike=1,next_batsman=2;
         int bowler=7;
         for(int i=0;i<overs;i++) {
-            int ball=0,run=0;
+            int ball=0,run=0,flag=0;
             for (int j = 0; j < 6; j++) {
+                if(total_wickets>=10) {flag=1;break;}
                 ball = (int) (Math.random() * 8);
                 team.getDetails().get(strike).setBalls_played(team.getDetails().get(strike).getBalls_played()+1);
                 if (ball == 7) {
@@ -52,6 +84,7 @@ public class MatchController {
                     }
                 }
             }
+            if(flag==1) break;
             if(ball%2!=0){
                 int temp=strike;
                 strike=non_strike;
@@ -63,15 +96,6 @@ public class MatchController {
             System.out.println(" ** over ends **");
             overs_run.add(run);
         }
-
-//        for(int i=0;i<11;i++){
-//            System.out.print(batting_team.get(i).getname()+" -> ");
-//            System.out.print(batting_team.get(i).getRuns_scored());
-//            System.out.print("/");
-//            System.out.print(batting_team.get(i).getBalls_played());
-//            System.out.print(" , ");
-//        }
-      //  System.out.println(total_runs);
         team.setTotal_runs(total_runs);
         team.setWickets_loss(total_wickets);
     }
@@ -85,7 +109,15 @@ public class MatchController {
     }
 
     public void results(){
-
+        if(india.getTotal_runs()> pakistan.getTotal_runs()){
+            System.out.println("india won the match");
+        }
+        else if(india.getTotal_runs()<pakistan.getTotal_runs()){
+            System.out.println("pakistan won the match");
+        }
+        else{
+            System.out.println("Match Draw");
+        }
     }
 
 }
