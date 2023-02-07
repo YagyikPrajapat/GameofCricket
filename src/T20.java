@@ -49,10 +49,6 @@ public class T20 implements CricketFormat {
         overs = scanner.nextInt();
     }
 
-    public int getOvers() {
-        return overs;
-    }
-
     public Team toss(){
         System.out.println("Choose 1 or 0 for toss as a skipper of Indian Team:");
         Toss toss = new Toss(india, pakistan);
