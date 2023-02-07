@@ -1,56 +1,36 @@
 import java.util.ArrayList;
 public class Player {
+    private String id;
     private String name;
-    private int runs_scored;
-    private int balls_played;
-    private int wickets_taken;
-    private int balls_thrown;
+    private int runs;
+    private int wickets;
 
-    public Player(String name){
-        this.name=name;
-//        this.runs_scored=0;
-//        this.balls_thrown=0;
-//        this.balls_played=0;
-//        this.wickets_taken=0;
+    public Player(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
-    public int getRuns_scored() {
-        return runs_scored;
+    public String getId() {
+        return id;
     }
 
-    public int getBalls_played() {
-        return balls_played;
+    public String getName() {
+        return name;
     }
 
-    public int getWickets_taken() {
-        return wickets_taken;
+    public int getRuns() {
+        return runs;
     }
 
-    public int getBalls_thrown() {
-        return balls_thrown;
+    public void setRuns(int runs) {
+        this.runs = runs;
     }
 
-    public void setRuns_scored(int runs_scored) {
-        this.runs_scored = runs_scored;
+    public int getWickets() {
+        return wickets;
     }
 
-    public void setBalls_played(int balls_played) {
-        this.balls_played = balls_played;
-    }
-
-    public void setWickets_taken(int wickets_taken) {
-        this.wickets_taken = wickets_taken;
-    }
-
-    public void setBalls_thrown(int balls_thrown) {
-        this.balls_thrown = balls_thrown;
-    }
-
-    public String getname(){
-       return name;
-    }
-
-    public void details(int player_number){
-
+    public void setWickets(int wickets) {
+        this.wickets = wickets;
     }
 }
