@@ -1,0 +1,24 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+dependencies {
+    implementation 'org.mongodb:mongodb-driver-sync:4.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+//    compile 'org.mongodb:mongo-java-driver:2.12.3'
+}
