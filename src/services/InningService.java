@@ -1,7 +1,8 @@
 package services;
 
 import dao.PlayerStatsDao;
-import dao.TeamDao;
+
+import dao.TeamDao;   //Todo Doubt whether to make teamDao methods static or not
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,6 @@ import java.util.*;
 public class InningService {
    private Team battingTeam;
    private Team bowlingTeam;
-   private TeamDao teamDao;
    private List<Integer> playerRuns;
    private List<Integer> ballsPlayed;
    private List<Integer> runsGiven;
@@ -24,7 +24,6 @@ public class InningService {
    public InningService(Team battingTeam, Team bowlingTeam) {
       this.battingTeam = battingTeam;
       this.bowlingTeam = bowlingTeam;
-      teamDao = new TeamDao();
       this.ballsPlayed = new ArrayList<>(Collections.nCopies(11, 0));
       this.playerRuns = new ArrayList<>(Collections.nCopies(11, 0));
       this.runsGiven = new ArrayList<>(Collections.nCopies(11, 0));
@@ -35,8 +34,8 @@ public class InningService {
    private int strike = 0, non_strike = 1, next_batsman = 2, bowler = 6;
    private int totalWickets = 0, totalRuns = 0;
 
-   public void inningsStart(int target) {
-      for (int i = 0; i < 2; i++) {
+   public void inningsStart(int target, int overs) {
+      for (int i = 0; i < overs; i++) {
          int ball = 0, flag = 0;
          for (int j = 0; j < 6; j++) {
             if (totalWickets >= 10 || totalRuns > target) {
@@ -93,7 +92,7 @@ public class InningService {
       PlayerStatsDao playerStatsDao = new PlayerStatsDao();
       List<String>  bowling = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
-         String playerId1 = teamDao.getBatsmanId(bowlingTeam.get_id(), i);
+         String playerId1 = TeamDao.getBatsmanId(bowlingTeam.get_id(), i);
          String id2 = playerStatsDao.insertPlayersStats(playerId1, playerRuns.get(i), ballsPlayed.get(i),
                  ballsThrown.get(i), runsGiven.get(i), wicketsTaken.get(i), scoreboardId);
          bowling.add(id2);
@@ -104,7 +103,7 @@ public class InningService {
       PlayerStatsDao playerStatsDao = new PlayerStatsDao();
       List<String>  batter = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
-         String playerId = teamDao.getBatsmanId(battingTeam.get_id(), i);
+         String playerId = TeamDao.getBatsmanId(battingTeam.get_id(), i);
          String id1 = playerStatsDao.insertPlayersStats(playerId, playerRuns.get(i), ballsPlayed.get(i),
                  ballsThrown.get(i), runsGiven.get(i), wicketsTaken.get(i), scoreboardId);
          batter.add(id1);
@@ -116,7 +115,7 @@ public class InningService {
       PlayerStatsDao playerStatsDao = new PlayerStatsDao();
       List<String> st = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
-         String playerId = teamDao.getBatsmanId(battingTeam.get_id(), i);
+         String playerId = TeamDao.getBatsmanId(battingTeam.get_id(), i);
          playerStatsDao.updatePlayersBattingStats(playerId, playerRuns.get(i), ballsPlayed.get(i), scoreboardId);
       }
    }
@@ -124,7 +123,7 @@ public class InningService {
       PlayerStatsDao playerStatsDao = new PlayerStatsDao();
       List<String> st = new ArrayList<>();
       for (int i = 0; i < 11; i++) {
-         String playerId1 = teamDao.getBatsmanId(bowlingTeam.get_id(), i);
+         String playerId1 = TeamDao.getBatsmanId(bowlingTeam.get_id(), i);
          playerStatsDao.updatePlayersBowlingStats(playerId1, ballsThrown.get(i),
                  runsGiven.get(i), wicketsTaken.get(i), scoreboardId);
       }

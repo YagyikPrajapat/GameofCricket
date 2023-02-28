@@ -1,8 +1,10 @@
 package controller;
 
+import dao.PlayerDao;
 import dao.PlayerStatsDao;
 import dao.ScoreboardDao;
 import dao.TeamDao;
+import model.Player;
 import model.PlayerStats;
 import model.Scoreboard;
 import model.Team;
@@ -15,11 +17,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class T20Controller implements CricketFormat {
-
    private static final int OVERS = 20;
    private TeamDao teamDao;
    private ScoreboardDao scoreboardDao;
    private PlayerStatsDao playerStatsDao;
+   private PlayerDao playerDao;
    Team team1;
    Team team2;
    Team bowlingTeam;
@@ -31,15 +33,16 @@ public class T20Controller implements CricketFormat {
       this.team2 = teamDao.findByName("Australia");
       scoreboardDao = new ScoreboardDao();
       playerStatsDao = new PlayerStatsDao();
+      playerDao = new PlayerDao();
    }
 
    public void matchStarts() {
       toss();
       InningService firstInning = new InningService(battingTeam, bowlingTeam);
-      firstInning.inningsStart(1000);
+      firstInning.inningsStart(1000, OVERS);
       System.out.println("\nFirst Inning Ends\n");
       InningService secondInning = new InningService(bowlingTeam, battingTeam);
-      secondInning.inningsStart(firstInning.getTotalRuns());
+      secondInning.inningsStart(firstInning.getTotalRuns(), OVERS);
       System.out.println("\nSecond Innings Ends\n");
       String scoreboardId = savingResultInDatabase(firstInning, secondInning);
       List playerStatsFirstInnings = firstInning.insertBattingPlayerStats(scoreboardId);
@@ -94,14 +97,16 @@ public class T20Controller implements CricketFormat {
 
       for (int i = 0; i < 11; i++) {
          PlayerStats playerStats = playerStatsDao.getPlayerStatsById(playerStatsListFirstInning.get(i));
-         System.out.printf("| %-6s | %-4s | %4s  | %4s  | %4s | %4s |%n", i, playerStats.getRunsScored(),
+         Player player = playerDao.getPlayerById(playerStats.getPlayerId());
+         System.out.printf("| %-6s | %-4s | %4s  | %4s  | %4s | %4s |%n", player.getName(), playerStats.getRunsScored(),
                  playerStats.getBallsPlayed(), playerStats.getRunsGiven(), playerStats.getBallsThrown(), playerStats.getWicketsTaken());
       }
       System.out.printf("--------------------------------%n");
       System.out.printf("--------------------------------" + scoreboard.getSecondInningTeamName() + "%n");
       for (int i = 0; i < 11; i++) {
          PlayerStats playerStats = playerStatsDao.getPlayerStatsById(playerStatsListSecondInning.get(i));
-         System.out.printf("| %-6s | %-4s | %4s  | %4s  | %4s | %4s |%n", i, playerStats.getRunsScored(),
+         Player player = playerDao.getPlayerById(playerStats.getPlayerId());
+         System.out.printf("| %-6s | %-4s | %4s  | %4s  | %4s | %4s |%n", player.getName(), playerStats.getRunsScored(),
                  playerStats.getBallsPlayed(), playerStats.getRunsGiven(), playerStats.getBallsThrown(), playerStats.getWicketsTaken());
       }
    }
