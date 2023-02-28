@@ -5,12 +5,10 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
-import model.Player;
 import model.Team;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertOneResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -21,19 +19,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 public class TeamDao {
-   private ObjectMapper mapper ;
-   private MongoCollection<Document> teamCollection;
+   private static ObjectMapper mapper ;
+   private static MongoCollection<Document> teamCollection;
 
    public TeamDao(){
       mapper = new ObjectMapper();
    }
 
-   public Team findByName(String teamName) {
+   public static Team findByName(String teamName) {
       teamCollection = database.getCollection("team");
       Bson filter1 = Filters.eq("teamName", teamName);
       Document doc = teamCollection.find(filter1).first();
       Team team = new Team();
-      System.out.println(team);
       try {
          team = mapper.readValue(doc.toJson(), Team.class);
       } catch (MongoException | IOException me) {
@@ -55,7 +52,7 @@ public class TeamDao {
       }
    }
 
-   public String getBatsmanId(String teamId, int strike){
+   public static String getBatsmanId(String teamId, int strike){
       teamCollection = database.getCollection("team");
       Bson filter1 = Filters.eq("_id", teamId);
       Document doc = teamCollection.find(filter1).first();

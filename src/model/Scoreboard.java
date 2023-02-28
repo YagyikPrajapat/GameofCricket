@@ -3,7 +3,6 @@ package model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import model.Team;
 
 import java.util.List;
 
